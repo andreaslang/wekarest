@@ -27,7 +27,7 @@ targetCompatibility = 1.8
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
     compile 'org.springframework.data:spring-data-mongodb:1.8.0.RELEASE'
-    compile 'wekarest:groovy-extensions:0.1-SNAPSHOT'
+    compile 'wekarest:content-extensions:0.1-SNAPSHOT'
     compile 'org.codehaus.groovy:groovy-all:2.4.5'
     compile 'nz.ac.waikato.cms.weka:weka-stable:3.6.13'
     compile 'org.springframework.boot:spring-boot-starter-web'
