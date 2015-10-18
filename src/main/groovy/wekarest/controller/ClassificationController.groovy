@@ -1,17 +1,12 @@
 package wekarest.controller
 
-import groovy.json.JsonOutput
-import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.*
 import wekarest.model.ClassificationOptions
 import wekarest.model.ClassificationResult
 import wekarest.service.ClassificationService
 import wekarest.service.DataAccessService
 import wekarest.service.JobService
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
 
 import static groovy.json.JsonOutput.toJson
 

@@ -1,9 +1,5 @@
 package wekarest.controller
 
-import wekarest.model.DataFile
-import wekarest.mongodb.FileRepository
-import wekarest.model.UploadResult
-import wekarest.service.DataAccessService
 import groovy.util.logging.Log4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -12,6 +8,10 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.multipart.MultipartFile
+import wekarest.model.DataFile
+import wekarest.model.UploadResult
+import wekarest.mongodb.FileRepository
+import wekarest.service.DataAccessService
 
 import static groovy.json.JsonOutput.toJson
 

@@ -1,15 +1,12 @@
 package wekarest
 
-import org.codehaus.groovy.control.CompilerConfiguration
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.CommandLineRunner
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.core.io.DefaultResourceLoader
-import wekarest.config.ConfigBuilder
-import wekarest.config.ConfigScript
 import wekarest.model.DataFile
 import wekarest.mongodb.FileRepository
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication
 
 @SpringBootApplication
 class Application implements CommandLineRunner {

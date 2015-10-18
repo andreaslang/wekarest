@@ -1,11 +1,11 @@
 package wekarest.service
 
-import wekarest.model.DataFile
-import wekarest.mongodb.FileRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import weka.core.Instances
 import weka.core.converters.CSVLoader
+import wekarest.model.DataFile
+import wekarest.mongodb.FileRepository
 
 @Service
 class DataAccessService {

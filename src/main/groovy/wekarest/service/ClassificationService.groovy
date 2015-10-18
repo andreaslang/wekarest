@@ -2,10 +2,10 @@ package wekarest.service
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import wekarest.model.ClassificationResult
 import weka.classifiers.Classifier
 import weka.classifiers.Evaluation
 import weka.core.Instances
+import wekarest.model.ClassificationResult
 
 @Service
 class ClassificationService {

@@ -1,8 +1,8 @@
 package wekarest.service
 
 import groovy.util.logging.Log4j
-import wekarest.model.ClassificationResult
 import org.springframework.stereotype.Service
+import wekarest.model.ClassificationResult
 import wekarest.model.JobInfo
 
 import java.util.concurrent.Callable

@@ -1,7 +1,7 @@
 package wekarest.mongodb
 
-import wekarest.model.DataFile
 import org.springframework.data.mongodb.repository.MongoRepository
+import wekarest.model.DataFile
 
 interface FileRepository extends MongoRepository<DataFile, String> {
 

@@ -1,15 +1,14 @@
 package wekarest.controller
 
-import wekarest.model.ClassificationResult
-import wekarest.model.JobInfo
-import wekarest.service.JobService
-
 import groovy.util.logging.Log4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
+import wekarest.model.ClassificationResult
+import wekarest.model.JobInfo
+import wekarest.service.JobService
 
 @Log4j
 @RestController
