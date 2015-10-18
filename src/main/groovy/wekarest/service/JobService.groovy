@@ -57,19 +57,26 @@ class JobService {
         }
     }
 
-    private static Callable<ClassificationResult> createJobCallable(JobInfo info, Closure classificationJob) {
-        return { ->
-            def result
-            try {
-                result = classificationJob()
-                info.status = SUCCESS
-                info.finished = new Date()
-            } catch (Exception ex) {
-                info.status = FAILURE
-                result = new ClassificationResult(details: ex.getMessage(), summary: 'Classification failed')
+    private static Callable<ClassificationResult> createJobCallable(final JobInfo info, final Closure classificationJob) {
+        return new Callable<ClassificationResult>() {
+
+            @Override
+            ClassificationResult call() throws Exception {
+                def result
+                try {
+                    log.error('Starting classification job')
+                    result = classificationJob()
+                    log.error(result)
+                    info.status = SUCCESS
+                    info.finished = new Date()
+                } catch (Exception ex) {
+                    info.status = FAILURE
+                    result = new ClassificationResult(details: ex.getMessage(), summary: 'Classification failed')
+                }
+                return result
             }
-            return result
-        } as Callable<ClassificationResult>
+        }
+
     }
 
 }
