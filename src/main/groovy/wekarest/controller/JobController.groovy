@@ -3,7 +3,7 @@ package wekarest.controller
 import wekarest.model.ClassificationResult
 import wekarest.model.JobInfo
 import wekarest.service.JobService
-import wekarest.service.LogisticRegressionService
+
 import groovy.util.logging.Log4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PathVariable
@@ -18,9 +18,6 @@ class JobController {
 
     @Autowired
     JobService jobService;
-
-    @Autowired
-    LogisticRegressionService logisticRegressionService;
 
     @RequestMapping(method=RequestMethod.GET)
     List<JobInfo> listJobs() {

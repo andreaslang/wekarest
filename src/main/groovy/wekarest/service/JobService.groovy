@@ -40,7 +40,7 @@ class JobService {
     }
 
     void createJob(String name, Closure classificationJob) {
-        log.error("Creating classification job $name")
+        log.info("Creating classification job $name")
         synchronized (STORE_LOCK) {
             if (!store.containsKey(name)) {
                 def jobInfo = new JobInfo(status: RUNNING, started: new Date())
@@ -64,14 +64,15 @@ class JobService {
             ClassificationResult call() throws Exception {
                 def result
                 try {
-                    log.error('Starting classification job')
+                    log.info('Starting classification job.')
                     result = classificationJob()
-                    log.error(result)
                     info.status = SUCCESS
                     info.finished = new Date()
+                    log.info('Finished classification job.')
                 } catch (Exception ex) {
                     info.status = FAILURE
                     result = new ClassificationResult(details: ex.getMessage(), summary: 'Classification failed')
+                    log.error('Classification failed', ex)
                 }
                 return result
             }

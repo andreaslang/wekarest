@@ -1,13 +1,40 @@
 package wekarest.service
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
 import wekarest.model.ClassificationResult
 import weka.classifiers.Classifier
 import weka.classifiers.Evaluation
 import weka.core.Instances
 
-abstract class ClassificationService {
+@Service
+class ClassificationService {
 
-    abstract ClassificationResult classify(Instances dataSet);
+    @Autowired
+    ConfigurationService configurationService
+
+    ClassificationResult classify(String classifierName, Instances dataSet) {
+        def (Instances trainingSet, Instances testSet) = splitIntoTrainingAndTestSet(dataSet)
+        classify(classifierName, trainingSet, testSet)
+    }
+
+    ClassificationResult classify(Classifier classifier, Instances dataSet) {
+        def (Instances trainingSet, Instances testSet) = splitIntoTrainingAndTestSet(dataSet)
+        classify(classifier, trainingSet, testSet)
+    }
+
+    ClassificationResult classify(String classifierName, Instances trainingSet, Instances testSet) {
+        def classifierConfig = configurationService.getClassifierConfig(classifierName)
+        def className = classifierConfig.classifier
+        Classifier classifier = loadClassifier(className)
+        classify(classifier, trainingSet, testSet)
+    }
+
+    private Classifier loadClassifier(className) {
+        def clazz = getClass().getClassLoader().loadClass(className)
+        def classifier = clazz.newInstance() as Classifier
+        classifier
+    }
 
     ClassificationResult classify(Classifier classifier, Instances trainingSet, Instances testSet) {
         classifier.buildClassifier(trainingSet)
