@@ -2,7 +2,9 @@ package wekarest.service
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import weka.core.Attribute
 import weka.core.Instances
+import wekarest.model.ClassificationOptions
 import wekarest.model.Data
 import wekarest.model.FileMetaData
 import wekarest.mongodb.FileRepository
@@ -16,15 +18,31 @@ class DataAccessService {
     @Autowired
     FileRepository fileRepository;
 
-    Instances loadDataSet(FileMetaData metaData) {
+    Instances loadDataSet(FileMetaData metaData, ClassificationOptions classificationOptions) {
+        def classProperty = classificationOptions.classProperty
+        def excludedProperties = classificationOptions.excludedProperties
         def hash = metaData.dataHash
         def data = load(hash)
         def loader = getLoader(metaData)
         loader.setSource(new ByteArrayInputStream(data.zippedContent.unzip()))
-        def dataSet = loader.getDataSet()
+        def dataSet = loader.getDataSet() as Instances
+        setClassPropertyAndRemoveExcludedProperties(dataSet, classProperty, excludedProperties)
+        return dataSet
+    }
+
+    private void setClassPropertyAndRemoveExcludedProperties(Instances dataSet, String classProperty, Set<String> excludedProperties) {
         if (dataSet.classIndex() == -1)
             dataSet.setClassIndex(dataSet.numAttributes() - 1);
-        return dataSet
+        def attributes = dataSet.enumerateAttributes()
+        def excludedAttributes = []
+        for (Attribute attribute in attributes) {
+            def attributeName = attribute.name()
+            if (attributeName == classProperty)
+                dataSet.setClass(attribute)
+            else if (excludedProperties && excludedProperties.contains(attributeName))
+                excludedAttributes << attribute
+        }
+        excludedAttributes.each { dataSet.delete(it.index()) }
     }
 
     private Object getLoader(FileMetaData metaData) {

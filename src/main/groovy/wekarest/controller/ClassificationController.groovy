@@ -35,7 +35,7 @@ class ClassificationController {
             def slurper = new JsonSlurper()
             def content = metaData.zippedContent.unzip()
             def fileMetaData = slurper.parse(content) as FileMetaData
-            def dataSet = dataAccessService.loadDataSet(fileMetaData)
+            def dataSet = dataAccessService.loadDataSet(fileMetaData, options)
             return classificationService.classify(options, dataSet)
         }
         return classificationHash
