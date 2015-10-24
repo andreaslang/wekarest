@@ -8,3 +8,6 @@ classifiers {
         defaultClassifierArguments: '-R 1.0E-8 -M -1'
     )
 }
+instanceLoaders {
+    csv('weka.core.converters.CSVLoader')
+}

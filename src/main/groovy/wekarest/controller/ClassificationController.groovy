@@ -1,9 +1,11 @@
 package wekarest.controller
 
+import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import wekarest.model.ClassificationOptions
 import wekarest.model.ClassificationResult
+import wekarest.model.FileMetaData
 import wekarest.service.ClassificationService
 import wekarest.service.DataAccessService
 import wekarest.service.JobService
@@ -29,8 +31,12 @@ class ClassificationController {
         def optionHash = toJson(options).asMD5()
         def classificationHash = "${optionHash}${fileHash}".asMD5()
         jobService.createJob(classificationHash) {
-            def dataSet = dataAccessService.loadDataSet(fileHash)
-            return classificationService.classify(options.classifier, dataSet)
+            def metaData = dataAccessService.load(fileHash)
+            def slurper = new JsonSlurper()
+            def content = metaData.zippedContent.unzip()
+            def fileMetaData = slurper.parse(content) as FileMetaData
+            def dataSet = dataAccessService.loadDataSet(fileMetaData)
+            return classificationService.classify(options, dataSet)
         }
         return classificationHash
     }

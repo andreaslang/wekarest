@@ -18,6 +18,10 @@ class ConfigurationService implements InitializingBean {
         return config.classifiers[name]
     }
 
+    String getInstanceLoaderClassName(String name) {
+        return config.instanceLoaders[name]
+    }
+
     @Override
     void afterPropertiesSet() throws Exception {
         def compilerConfiguration = new CompilerConfiguration()

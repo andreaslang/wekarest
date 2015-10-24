@@ -6,10 +6,10 @@ class Data {
 
     @Id
     String hash
-    byte[] content
+    byte[] zippedContent
 
     String asString() {
-        return new String(content)
+        return new String(zippedContent)
     }
 
 }

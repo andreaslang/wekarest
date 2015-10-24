@@ -23,6 +23,6 @@ class Application implements CommandLineRunner {
     public void run(String... args) throws Exception {
         repository.deleteAll();
         def fileContent = 'hello world'
-        repository.save(new Data(hash: fileContent.asMD5(), content: fileContent as byte[]));
+        repository.save(new Data(hash: fileContent.asMD5(), zippedContent: fileContent as byte[]));
     }
 }

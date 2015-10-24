@@ -17,9 +17,9 @@ class ClassificationService {
     @Autowired
     ConfigurationService configurationService
 
-    ClassificationResult classify(String classifierName, Instances dataSet) {
+    ClassificationResult classify(ClassificationOptions options, Instances dataSet) {
         def (Instances trainingSet, Instances testSet) = splitIntoTrainingAndTestSet(dataSet)
-        return classify(classifierName, trainingSet, testSet)
+        return classify(options, trainingSet, testSet)
     }
 
     ClassificationResult classify(Classifier classifier, Instances dataSet) {

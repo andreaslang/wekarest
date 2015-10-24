@@ -1,5 +1,6 @@
 package wekarest.controller
 
+import groovy.json.JsonOutput
 import groovy.util.logging.Log4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.multipart.MultipartFile
 import wekarest.model.Data
+import wekarest.model.FileMetaData
 import wekarest.model.UploadResult
 import wekarest.mongodb.FileRepository
 import wekarest.service.DataAccessService
@@ -31,12 +33,17 @@ class FileUploadController {
     }
 
     @RequestMapping(value="/upload", method=RequestMethod.POST)
-    @ResponseBody String handleFileUpload(@RequestParam('file') MultipartFile file) {
+    @ResponseBody String handleFileUpload(
+            @RequestParam(value = 'name', required = false, defaultValue = 'file.csv') String name,
+            @RequestParam('file') MultipartFile file) {
         def response
         if (!file.isEmpty()) {
-            Data dataFile = dataAccessService.store(file.bytes)
+            Data data = dataAccessService.store(file.bytes)
+            def fileMetaData = new FileMetaData(name:  name, dataHash: data.hash, type: 'csv')
+            def metaDataJson = toJson(fileMetaData)
+            def metaData = dataAccessService.store(metaDataJson)
             response = new UploadResult(
-                    status: 'SUCCESS', message: "File uploaded! Hash: ${dataFile.hash}"
+                    status: 'SUCCESS', message: "File uploaded! Hash: ${metaData.hash}"
             )
         } else {
             response = new UploadResult(
