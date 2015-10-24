@@ -7,6 +7,10 @@ classifiers {
         classifier: 'weka.classifiers.functions.Logistic',
         defaultClassifierArguments: '-R 1.0E-8 -M -1'
     )
+    'naive-bayes'(
+        classifier: 'weka.classifiers.bayes.NaiveBayes',
+        defaultClassifierArguments: ''
+    )
 }
 instanceLoaders {
     'text/csv'('weka.core.converters.CSVLoader')
