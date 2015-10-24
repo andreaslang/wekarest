@@ -17,13 +17,13 @@ import static groovy.json.JsonOutput.toJson
 class ClassificationController {
 
     @Autowired
-    JobService jobService;
+    JobService jobService
 
     @Autowired
-    DataAccessService dataAccessService;
+    DataAccessService dataAccessService
 
     @Autowired
-    ClassificationService classificationService;
+    ClassificationService classificationService
 
     @RequestMapping(method=RequestMethod.POST)
     String createClassification(@RequestBody ClassificationOptions options) {
