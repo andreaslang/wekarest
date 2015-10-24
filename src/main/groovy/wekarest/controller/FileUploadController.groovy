@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.multipart.MultipartFile
-import wekarest.model.DataFile
+import wekarest.model.Data
 import wekarest.model.UploadResult
 import wekarest.mongodb.FileRepository
 import wekarest.service.DataAccessService
@@ -34,7 +34,7 @@ class FileUploadController {
     @ResponseBody String handleFileUpload(@RequestParam('file') MultipartFile file) {
         def response
         if (!file.isEmpty()) {
-            DataFile dataFile = dataAccessService.storeFile(file.bytes)
+            Data dataFile = dataAccessService.store(file.bytes)
             response = new UploadResult(
                     status: 'SUCCESS', message: "File uploaded! Hash: ${dataFile.hash}"
             )

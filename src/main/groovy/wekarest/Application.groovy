@@ -5,7 +5,7 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.core.io.DefaultResourceLoader
-import wekarest.model.DataFile
+import wekarest.model.Data
 import wekarest.mongodb.FileRepository
 
 @SpringBootApplication
@@ -23,6 +23,6 @@ class Application implements CommandLineRunner {
     public void run(String... args) throws Exception {
         repository.deleteAll();
         def fileContent = 'hello world'
-        repository.save(new DataFile(hash: fileContent.asMD5(), data: fileContent as byte[]));
+        repository.save(new Data(hash: fileContent.asMD5(), content: fileContent as byte[]));
     }
 }

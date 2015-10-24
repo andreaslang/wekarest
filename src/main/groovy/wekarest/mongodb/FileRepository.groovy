@@ -1,10 +1,10 @@
 package wekarest.mongodb
 
 import org.springframework.data.mongodb.repository.MongoRepository
-import wekarest.model.DataFile
+import wekarest.model.Data
 
-interface FileRepository extends MongoRepository<DataFile, String> {
+interface FileRepository extends MongoRepository<Data, String> {
 
-    DataFile findByHash(String hash)
+    Data findByHash(String hash)
 
 }

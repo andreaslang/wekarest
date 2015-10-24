@@ -23,21 +23,21 @@ class ClassificationController {
     @Autowired
     ClassificationService classificationService;
 
-    @RequestMapping(value='/{hash}', method=RequestMethod.PUT)
-    String createClassification(@PathVariable('hash') String fileHash,
-                                   @RequestBody ClassificationOptions options) {
+    @RequestMapping(method=RequestMethod.POST)
+    String createClassification(@RequestBody ClassificationOptions options) {
+        def fileHash = options.fileHash
         def optionHash = toJson(options).asMD5()
-        def jobId = "${optionHash}_${fileHash}"
-        jobService.createJob(jobId) {
+        def classificationHash = "${optionHash}${fileHash}".asMD5()
+        jobService.createJob(classificationHash) {
             def dataSet = dataAccessService.loadDataSet(fileHash)
             return classificationService.classify(options.classifier, dataSet)
         }
-        return jobId
+        return classificationHash
     }
 
-    @RequestMapping(value='/{jobId}', method=RequestMethod.GET)
-    ClassificationResult supportVectorMachineClassification(@PathVariable('jobId') String jobId) {
-        return jobService.retrieveJobResult(jobId)
+    @RequestMapping(value='/{classificationHash}', method=RequestMethod.GET)
+    ClassificationResult supportVectorMachineClassification(@PathVariable('classificationHash') String classificationHash) {
+        return jobService.retrieveJobResult(classificationHash)
     }
 
 }

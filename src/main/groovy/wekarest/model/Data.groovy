@@ -2,10 +2,14 @@ package wekarest.model
 
 import org.springframework.data.annotation.Id
 
-class DataFile {
+class Data {
 
     @Id
     String hash
-    byte[] data
+    byte[] content
+
+    String asString() {
+        return new String(content)
+    }
 
 }

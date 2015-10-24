@@ -5,7 +5,11 @@ import org.springframework.stereotype.Service
 import weka.classifiers.Classifier
 import weka.classifiers.Evaluation
 import weka.core.Instances
+import weka.core.Utils
+import wekarest.model.ClassificationOptions
 import wekarest.model.ClassificationResult
+
+import static weka.core.Utils.splitOptions
 
 @Service
 class ClassificationService {
@@ -15,25 +19,40 @@ class ClassificationService {
 
     ClassificationResult classify(String classifierName, Instances dataSet) {
         def (Instances trainingSet, Instances testSet) = splitIntoTrainingAndTestSet(dataSet)
-        classify(classifierName, trainingSet, testSet)
+        return classify(classifierName, trainingSet, testSet)
     }
 
     ClassificationResult classify(Classifier classifier, Instances dataSet) {
         def (Instances trainingSet, Instances testSet) = splitIntoTrainingAndTestSet(dataSet)
-        classify(classifier, trainingSet, testSet)
+        return classify(classifier, trainingSet, testSet)
     }
 
     ClassificationResult classify(String classifierName, Instances trainingSet, Instances testSet) {
-        def classifierConfig = configurationService.getClassifierConfig(classifierName)
+        return classify(new ClassificationOptions(classifier: classifierName), trainingSet, testSet)
+    }
+
+    ClassificationResult classify(ClassificationOptions options, Instances trainingSet, Instances testSet) {
+        def classifierConfig = configurationService.getClassifierConfig(options.classifier)
         def className = classifierConfig.classifier
         Classifier classifier = loadClassifier(className)
-        classify(classifier, trainingSet, testSet)
+        classifier.setOptions(getWekaClassifierOptions(options, classifierConfig))
+        return classify(classifier, trainingSet, testSet)
     }
 
     private Classifier loadClassifier(className) {
         def clazz = getClass().getClassLoader().loadClass(className)
         def classifier = clazz.newInstance() as Classifier
-        classifier
+        return classifier
+    }
+
+    private String[] getWekaClassifierOptions(ClassificationOptions classificationOptions, Map map) {
+        def wekaOptions
+        def arguments = classificationOptions.classifierArguments
+        if (arguments)
+            wekaOptions = splitOptions(arguments)
+        else
+            wekaOptions = splitOptions(map.defaultClassifierArguments)
+        return wekaOptions
     }
 
     ClassificationResult classify(Classifier classifier, Instances trainingSet, Instances testSet) {
