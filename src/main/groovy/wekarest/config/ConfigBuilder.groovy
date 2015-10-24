@@ -27,13 +27,19 @@ class ConfigBuilder extends BuilderSupport {
 
     @Override
     protected Object createNode(Object name, Object value) {
-        throw new UnsupportedOperationException('Cannot create node with value - only map syntax supported.')
+        def currentNode = stack.getLast()
+        currentNode[name] = value
+        return currentNode
     }
 
     @Override
     protected Object createNode(Object name, Map attributes) {
         def currentNode = stack.getLast()
-        currentNode[name] = attributes
+        if (currentNode.containsKey(name)  && currentNode[name].isMap()) {
+            def map = currentNode[name] as Map
+            map.mergeRecursive(attributes)
+        } else
+            currentNode[name] = attributes
         stack << attributes
         return attributes
     }
