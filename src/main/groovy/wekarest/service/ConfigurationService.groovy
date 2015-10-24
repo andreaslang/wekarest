@@ -18,8 +18,8 @@ class ConfigurationService implements InitializingBean {
         return config.classifiers[name]
     }
 
-    String getInstanceLoaderClassName(String name) {
-        return config.instanceLoaders[name]
+    String getInstanceLoaderClassName(String type) {
+        return config.instanceLoaders[type]
     }
 
     @Override

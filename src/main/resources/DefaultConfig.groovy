@@ -9,5 +9,5 @@ classifiers {
     )
 }
 instanceLoaders {
-    csv('weka.core.converters.CSVLoader')
+    'text/csv'('weka.core.converters.CSVLoader')
 }

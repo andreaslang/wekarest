@@ -13,7 +13,9 @@ import wekarest.model.Data
 import wekarest.model.FileMetaData
 import wekarest.model.UploadResult
 import wekarest.mongodb.FileRepository
+import wekarest.service.ConfigurationService
 import wekarest.service.DataAccessService
+import wekarest.service.MimeTypeDetectionService
 
 import static groovy.json.JsonOutput.toJson
 
@@ -22,10 +24,16 @@ import static groovy.json.JsonOutput.toJson
 class FileUploadController {
 
     @Autowired
-    FileRepository repository;
+    FileRepository repository
 
     @Autowired
-    DataAccessService dataAccessService;
+    ConfigurationService configurationService
+
+    @Autowired
+    DataAccessService dataAccessService
+
+    @Autowired
+    MimeTypeDetectionService mimeTypeDetectionService
 
     @RequestMapping(value='/upload', method=RequestMethod.GET)
     @ResponseBody String provideUploadInfo() {
@@ -38,8 +46,11 @@ class FileUploadController {
             @RequestParam('file') MultipartFile file) {
         def response
         if (!file.isEmpty()) {
-            Data data = dataAccessService.store(file.bytes)
-            def fileMetaData = new FileMetaData(name:  name, dataHash: data.hash, type: 'csv')
+            def bytes = file.bytes
+            Data data = dataAccessService.store(bytes)
+            def type = mimeTypeDetectionService.getMimeType(name, bytes)
+            checkIfLoaderForFileTypeExists(type)
+            def fileMetaData = new FileMetaData(name:  name, dataHash: data.hash, type: type)
             def metaDataJson = toJson(fileMetaData)
             def metaData = dataAccessService.store(metaDataJson)
             response = new UploadResult(
@@ -51,6 +62,12 @@ class FileUploadController {
             )
         }
         return toJson(response)
+    }
+
+    private void checkIfLoaderForFileTypeExists(String type) {
+        def loaderName = configurationService.getInstanceLoaderClassName(type)
+        if (!loaderName)
+            throw new RuntimeException("Unknwon file type $type")
     }
 
 }
